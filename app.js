@@ -56,7 +56,7 @@ function getCurrentSpot(res, mysql, context, complete) {
 }
 
 //This function inserts a new parking spot into the database
-function postNewSpot(req) {
+function postNewSpot(req, mysql, complete) {
     // todo: week 2
 }
 
@@ -161,29 +161,17 @@ app.get("/settings", function(req, res){
 
 //404 error handler
 app.use(function(req, res){
-    let context = {};
-    if(req.user){
-        context.user = {};
-        context.user.fname = req.user.fname;
-    }
     res.status(404);
-    res.render("404", context);
+    res.render("404");
 });
 
 
 //500 error handler
 app.use(function(err, req, res, next){
     console.error(err.stack);
-    
-    let context = {};
-    if(req.user){
-        context.user = {};
-        context.user.fname = req.user.fname;
-    }
-    
     res.type("plain/text");
     res.status(500);
-    res.render("500", context);
+    res.render("500");
 });
 
 
