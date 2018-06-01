@@ -47,17 +47,17 @@ app.use(passport.session());
 
 //This function will pull all of the spots from the database associated with the current user
 function getParkingHistory(res, mysql, context, complete) {
-    
+    // todo: week 1
 }
 
 //This function will return the currently active parking spot from the database
 function getCurrentSpot(res, mysql, context, complete) {
-    
+    // todo: week 2
 }
 
 //This function inserts a new parking spot into the database
 function postNewSpot(req) {
-    
+    // todo: week 2
 }
 
 
@@ -85,22 +85,63 @@ app.get("/", function(req, res){
 });
 
 
+//login page
+app.get("/login", function(req, res){
+    let context = {};
+    context.message = req.flash("loginMessage");
+    res.render("login", context);
+});
+
+
+//login post handler. Uses passport.js for authentication
+app.post("/login", passport.authenticate("local-login", {
+        successRedirect: "/",
+        failureRedirect: "/login",
+        failureFlash: true
+    })
+);
+
+
+//registration page
+app.get("/register", function(req, res){
+    let context = {};
+    context.message = req.flash("signupMessage");
+    res.render("register", context);
+});
+
+
+//registration post handler. Uses passport.js for authentication
+app.post("/register", passport.authenticate("local-register", {
+        successRedirect: "/",
+        failureRedirect: "/register",
+        failureFlash: true
+    })
+);
+
+
+//log the user out and redirect to login page
+app.get("/logout", function(req, res){
+    req.logout();
+    res.redirect("/login");
+});
+
+
 //This will show the results of logging a parking spot. This page also gives the user
 //the option to add notes and pictures
 app.get("/spot-logged", function(req, res){
-    
+    // todo: week 2
 });
 
 
 //This route will show the navigation page to the currently active spot.
 app.get("/return", function(req, res){
-    
+    // todo: week 2
 });
 
 
 //Route for parking history
 app.get("/history", function(req, res){
-    
+    // todo: week 1
 });
 
 
@@ -108,7 +149,7 @@ app.get("/history", function(req, res){
 //parameters:
 //  id - The id for the database entry for the parking spot
 app.get("spot/:id", function(req,res){
-    
+    // todo: week 2
 });
 
 

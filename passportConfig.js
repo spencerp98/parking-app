@@ -5,6 +5,9 @@ const LocalStrategy = require('passport-local').Strategy;
 
 const mysql = require('./dbcon.js');
 
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
+
 // expose this function to our app using module.exports
 module.exports = function(passport) {
 
@@ -59,12 +62,14 @@ module.exports = function(passport) {
 				// if there is no user with that email
                 // create the user
                 let newUserMysql = new Object();
+                const salt = bcrypt.genSaltSync(saltRounds);
+                const hash = bcrypt.hashSync(password, salt);
 				
 				newUserMysql.email    = email;
-                newUserMysql.password = password; // use the generateHash function in our user model
+                newUserMysql.password = hash;
 			
 				const insertQuery = "INSERT INTO user ( email, password, fname, lname ) values (?,?,?,?)";
-				const insertInserts = [email, password, req.body.fname, req.body.lname];
+				const insertInserts = [email, hash, req.body.fname, req.body.lname];
 				console.log(insertQuery);
 				mysql.pool.query(insertQuery, insertInserts, function(error, results){
 				    if(error){
@@ -101,12 +106,18 @@ module.exports = function(passport) {
                 return done(null, false, req.flash('loginMessage', 'There is no account associated with the email address you entered.')); // req.flash is the way to set flashdata using connect-flash
             }
 			
-			// if the user is found but the password is wrong
-            if (!( results[0].password == password))
-                return done(null, false, req.flash('loginMessage', 'Oops! The password you entered was incorrect.')); // create the loginMessage and save it to session as flashdata
-			
-            // all is well, return successful user
-            return done(null, results[0]);
+			// check if password is correct
+			bcrypt.compare(password, results[0].password, function(err, res){
+			    if(err) {
+			        console.log("something went wrong with bycrpt.compare");
+			    }
+			    if(res == true) {
+			        return done(null, results[0]);
+			    }
+			    else{
+			        return done(null, false, req.flash('loginMessage', 'Oops! The password you entered was incorrect.')); // create the loginMessage and save it to session as flashdata
+			    }
+			});
 		
 		});
 		
