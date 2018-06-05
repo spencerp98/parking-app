@@ -128,14 +128,14 @@ app.get("/logout", function(req, res){
 
 //This will show the results of logging a parking spot. This page also gives the user
 //the option to add notes and pictures
-app.get("/spot-logged", function(req, res){
+app.post("/nav", function(req, res){
     // todo: week 2
 });
 
 
 //This route will show the navigation page to the currently active spot.
-app.get("/return", function(req, res){
-    // todo: week 2
+app.get("/nav", function(req, res){
+    res.render('navigation');
 });
 
 
