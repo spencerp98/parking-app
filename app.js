@@ -51,13 +51,36 @@ function getParkingHistory(res, mysql, context, complete) {
 }
 
 //This function will return the currently active parking spot from the database
-function getCurrentSpot(res, mysql, context, complete) {
-    // todo: week 2
+function getCurrentSpot(req, res, mysql, context, complete) {
+    let sql = "SELECT latitude, longitude, MAX(id) FROM parkingSpot WHERE user_id = (?)";
+    let inserts = [req.user.id];
+    mysql.pool.query(sql, inserts, function(error, results, fields){
+        if(error){
+            res.write(JSON.stringify(error));
+            res.end();
+        }
+        context.parkingSpot = results[0];
+        complete();
+    });
+    
+    
 }
 
 //This function inserts a new parking spot into the database
-function postNewSpot(req, mysql, complete) {
-    // todo: week 2
+function twoDigits(d) {
+    if(0 <= d && d < 10) return "0" + d.toString();
+    if(-10 < d && d < 0) return "-0" + (-1*d).toString();
+    return d.toString();
+}
+
+Date.prototype.toMysqlFormat = function() {
+    return this.getUTCFullYear() + "-" + twoDigits(1 + this.getUTCMonth()) + "-" + twoDigits(this.getUTCDate()) + " " + twoDigits(this.getUTCHours()) + ":" + twoDigits(this.getUTCMinutes()) + ":" + twoDigits(this.getUTCSeconds());
+};
+
+function insertNewSpot(req, mysql, complete) {
+    let sql = "INSERT INTO parkingSpot (latitude, longitude, date, user_id) VALUES (?,?,?,?)";
+    let inserts = [req.body.lat, req.body.lng, req.body.date.toMysqlFormat, req.user.id];
+    mysql.pool.query(sql, inserts, complete);
 }
 
 
@@ -129,13 +152,31 @@ app.get("/logout", function(req, res){
 //This will show the results of logging a parking spot. This page also gives the user
 //the option to add notes and pictures
 app.post("/nav", function(req, res){
-    // todo: week 2
+    let callbackCount = 0;
+    insertNewSpot(req, mysql, complete);
+    
+    function complete(){
+        callbackCount++;
+        if(callbackCount <= 1){
+            res.redirect('/nav');
+        }
+    }
 });
 
 
 //This route will show the navigation page to the currently active spot.
 app.get("/nav", function(req, res){
-    res.render('navigation');
+    let callbackCount = 0;
+    let context = {};
+    
+    getCurrentSpot(req, res, mysql, context, complete);
+    
+    function complete(){
+        callbackCount++;
+        if(callbackCount <= 1){
+            res.render('navigation', context);
+        }
+    }
 });
 
 

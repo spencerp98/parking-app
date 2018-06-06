@@ -1,6 +1,6 @@
 <link href="/css/nav.css" rel="stylesheet" type="text/css">
 
-
+<p onLoad="setLocation({{{parkingSpot.latitude}}}, {{{parkingSpot.longitude}}})"></p>
 
 <!--The div element for the map -->
 <div id="map"></div>
@@ -8,5 +8,9 @@
 <div id="directionsPanel"></div>
 
 <div class="d-flex justify-content-center"><button id="navBtn" type="button" class="btn btn-primary">Get directions</button></div>
+
+<div class="d-flex justify-content-center m-2">
+    <a class="btn btn-primary" href="/">I Found My Car</a>
+</div>
 
 <script src="/scripts/nav.js"></script>

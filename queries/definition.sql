@@ -17,8 +17,6 @@ CREATE TABLE `parkingSpot` (
   `longitude` varchar(10),
   `favorite` bit(1),
   `date` datetime,
-  `description` varchar(255),
-  `picture` varchar(255),
   PRIMARY KEY (`id`),
 	FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB;

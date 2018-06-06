@@ -1,19 +1,36 @@
-let parkingSpot = {
-    lat: 39.964849,
-    lng: -75.181275
-};
+let parkingSpot = {};
+
+function setLocation(lat, lng){
+    parkingSpot.lat = Number(lat);
+    parkingSpot.lng = Number(lng);
+    console.log("test");
+    initMap(1);
+}
     
-    // Initialize and add the map
-function initMap() {
-    let directionsService = new google.maps.DirectionsService();
-    let directionsDisplay = new google.maps.DirectionsRenderer();
-    let mapOptions = {
-        zoom:12,
-        center: new google.maps.LatLng(parkingSpot.lat, parkingSpot.lng)
-    };
-    let map = new google.maps.Map(document.getElementById('map'), mapOptions);
-    directionsDisplay.setMap(map);
-    directionsDisplay.setPanel(document.getElementById('directionsPanel'));
+// Initialize and add the map
+function initMap(count) {
+    if(count = 1){
+        let directionsService = new google.maps.DirectionsService();
+        let directionsDisplay = new google.maps.DirectionsRenderer();
+        
+        // map options
+        let mapOptions = {
+            zoom:12,
+            center: new google.maps.LatLng(parkingSpot.lat, parkingSpot.lng)
+        };
+        
+        // new map
+        let map = new google.maps.Map(document.getElementById('map'), mapOptions);
+        
+        // place marker
+        let marker = new google.maps.Marker({
+            position: {lat:parkingSpot.lat, lng:parkingSpot.lng},
+            map: map
+        })
+        
+        directionsDisplay.setMap(map);
+        directionsDisplay.setPanel(document.getElementById('directionsPanel'));
+    }
 }
 
 let navBtn = document.getElementById('navBtn');
