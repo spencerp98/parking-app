@@ -67,19 +67,9 @@ function getCurrentSpot(req, res, mysql, context, complete) {
 }
 
 //This function inserts a new parking spot into the database
-function twoDigits(d) {
-    if(0 <= d && d < 10) return "0" + d.toString();
-    if(-10 < d && d < 0) return "-0" + (-1*d).toString();
-    return d.toString();
-}
-
-Date.prototype.toMysqlFormat = function() {
-    return this.getUTCFullYear() + "-" + twoDigits(1 + this.getUTCMonth()) + "-" + twoDigits(this.getUTCDate()) + " " + twoDigits(this.getUTCHours()) + ":" + twoDigits(this.getUTCMinutes()) + ":" + twoDigits(this.getUTCSeconds());
-};
-
 function insertNewSpot(req, mysql, complete) {
-    let sql = "INSERT INTO parkingSpot (latitude, longitude, date, user_id) VALUES (?,?,?,?)";
-    let inserts = [req.body.lat, req.body.lng, req.body.date.toMysqlFormat, req.user.id];
+    let sql = "INSERT INTO parkingSpot (latitude, longitude, favorite, date, user_id) VALUES (?,?,?,?,?)";
+    let inserts = [req.body.lat, req.body.lng, 0, req.body.date, req.user.id];
     mysql.pool.query(sql, inserts, complete);
 }
 

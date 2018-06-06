@@ -9,22 +9,7 @@ btn.addEventListener('click', function(){
 });
 
 function createSpot(position) {
-    // let formData = new FormData();
-    
-    // // location
-    // formData.append("lat", position.coords.latitude);
-    // formData.append("lng", position.coords.longitude);
-    
-    // // date
-    // let d = new Date();
-    // formData.append("date", d);
-    
-    // // submit
-    // let request = new XMLHttpRequest();
-    // request.open("POST", "/nav");
-    // request.send(formData);
-    
-    let d = new Date();
+    let d = new Date().toISOString().slice(0, 19).replace('T', ' ');
     
     let params = {
         lat: position.coords.latitude,
@@ -38,8 +23,6 @@ function createSpot(position) {
 function post(path, params, method) {
     method = method || "post"; // Set method to post by default if not specified.
 
-    // The rest of this code assumes you are not using a library.
-    // It can be made less wordy if you use one.
     var form = document.createElement("form");
     form.setAttribute("method", method);
     form.setAttribute("action", path);

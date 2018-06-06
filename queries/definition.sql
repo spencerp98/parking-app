@@ -13,10 +13,11 @@ CREATE TABLE `user` (
 CREATE TABLE `parkingSpot` (
   `id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(64),
-  `latitude` varchar(10),
-  `longitude` varchar(10),
+  `latitude` varchar(11),
+  `longitude` varchar(11),
   `favorite` bit(1),
   `date` datetime,
+  `user_id` int,
   PRIMARY KEY (`id`),
 	FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB;
