@@ -50,8 +50,6 @@ module.exports = function(passport) {
 		const sql = "SELECT id, email, password FROM user WHERE email = ?";
 		const inserts = [email];
         mysql.pool.query(sql, inserts, function(error ,results){
-			console.log(results);
-			console.log("above row object");
 			if (error) {
                 return done(error);
 			}
@@ -70,7 +68,6 @@ module.exports = function(passport) {
 			
 				const insertQuery = "INSERT INTO user ( email, password, fname, lname ) values (?,?,?,?)";
 				const insertInserts = [email, hash, req.body.fname, req.body.lname];
-				console.log(insertQuery);
 				mysql.pool.query(insertQuery, insertInserts, function(error, results){
 				    if(error){
 				        return done(error);

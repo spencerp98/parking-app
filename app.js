@@ -52,7 +52,7 @@ function getParkingHistory(res, mysql, context, complete) {
 
 //This function will return the currently active parking spot from the database
 function getCurrentSpot(req, res, mysql, context, complete) {
-    let sql = "SELECT latitude, longitude, MAX(id) FROM parkingSpot WHERE user_id = (?)";
+    let sql = "SELECT id, latitude, longitude, `date` FROM parkingSpot INNER JOIN (SELECT MAX(`id`) as maxId FROM parkingSpot WHERE user_id = (?)) mt ON id = mt.maxId";
     let inserts = [req.user.id];
     mysql.pool.query(sql, inserts, function(error, results, fields){
         if(error){
